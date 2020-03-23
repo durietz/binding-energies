@@ -1,0 +1,84 @@
+Programs to calculate/extract bindingenergies
+
+Suggested usage:
+
+1. Calculate various vacancy states using "calc_listZ.pl"
+2. Extract energies for calculated states using "getenergies_multiZ.pl"
+
+If FAILED-CALC.LOG created, check individual cases and re-run appropriate
+programs as stand-alone. 
+
+Outfile is appended to ENERGY.DAT. Check file and see if values missing. If
+so, check individual cases and re-run programs as stand-alone.
+
+--- Program/files ---
+
+calc_singelvac.pl
+	Calculate single vacancy. Create subdirectory structure for calculations
+	using "Z-element-A/vacancy". No files removed. All inputfiles to other
+	programs stored in "log"-directory. It is possible to manually run all
+	Graps2018 programs using the inputfiles (to debug?). Note direcotry "FO"
+	created for no vacancy (FO, FullOrbital). 
+
+calc_multivac.pl
+	Calls "calc_singlevac.pl"
+	Calculate multiple vacancies for given atom.
+	Directories/files for failed calculations removed. In case of failed
+	calculations, try run specific calculation using "calc_singlevad.pl"
+	alone (which also does now remove subdirs). 
+
+calc_listZ.pl
+	Input a list Z and calls "calc_multivac.pl" for each Z. 
+	Calculates all vacancies using most abundant istope for each Z in list. 
+
+getenergies_singleZ.pl
+	Get energies for given Z and vacancies. When obtained energy values
+	check energies and mixing coefficient. Use one of following
+	methods	to get get the value for given vacancy (default #1, modify code
+	to change):
+	
+	1. "purest" state configuration
+	   Extract energies for given vacancy and choose the one that has
+	   highest value for mixing coefficient. In case of same value for
+	   mixing coefficient (e.g. mix = 1.000) set the value to the lowest
+	   energy.
+
+	2. lowest energy 
+	   Extract energies for given vacancy and choose the one that has
+	   the lowest energy.  
+
+getenergies_multiZ.pl
+	Input a list of Z calls "getenergies_singleZ.pl" for each Z. 
+	Get energies for several atoms and several vacancies.
+        Output is printed/append to file.
+
+atomconfig_all.txt
+	List of neutral atoms sorted by increasing Z. Mass number (A)
+	taken for most abundant isotope. Configuration listed is used
+	for calculations with Graps2018. Note the configuration not
+	always in order e.g. 5p(6)4f(7)6s(2) where 4f listed after 5p.
+
+rmixextract_rdr.f90
+	To allow for longer configuration lists in output from rmixextract
+	need a few changes in original .f90 file. Changes done seem to work.
+	Recompile and put in same directory as original.
+
+rcsfgenerate90ver2
+	Need to do changes in rcsfgenerate to allow for more subshells. Per
+	default only 20? subshells allowed. Replace/recombile with updated
+	files (tarball exist: rcsfgenerate90ver2.tar.gz)
+
+
+
+#####  Change log  #####
+
+2020-03-05
+	First version ready and shipped
+
+2020-03-09
+	Jörgen fix new version of "rcsfgenerate", which allow calculations with
+	CSF-lists for heavier system with open inner shells.
+
+2020-03-12
+	Fix 'FO' works properly. 'Radioactive atoms' atoms, with A listed with * in
+	"atomconfig_all.txt" now should work properly.  
