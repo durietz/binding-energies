@@ -251,7 +251,7 @@ END_INPUT
 sub makeinp_jj2lsj{
      my $name = shift;
 
-     my $filename = 'input_rcsfblock';
+     my $filename = 'input_jj2lsj';
     open my $FH,'>',$filename;
     
     my $inp = << 'END_INPUT';
